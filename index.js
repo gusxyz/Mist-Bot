@@ -102,6 +102,7 @@ if (message.content.startsWith(Prefix + "giverole")) {
         .setThumbnail(target.avatarURL)
         .addField("Tag", target.tag, true)
         .addField("ID", target.id, true)
+        .addField("Roles", )
         .addField("Created", target.createdAt, true)
         .addField("Status", target.presence.status, true)
         .addField("Game", target.presence.game, true)
