@@ -1,50 +1,13 @@
-const http = require('http');
-const express = require('express');
-const app = express();
-app.get("/", (request, response) => {
- console.log(Date.now() + " Just got pinged!");
- response.sendStatus(200);
-});
-app.listen(process.env.PORT);
-setInterval(() => {
- http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 280000);
-
 const Discord = require("discord.js");
-var test = false;
 var ownerID = "82173389657079808"
-var Mball = [ //8Ball options
-    "It is certain",
-    "It is decidedly so",
-    "Without a doubt",
-    "Yes definitely",
-    "You may rely on it",
-    "As I see it, yes",
-    "Most Likely",
-    "Outlook Good",
-    "Yes",
-    "Signs Point to yes",
-    "Try Again Later",
-    "Dont Count on it",
-    "My Reply is no",
-    "My sources say no",
-    "Outlook not so good",
-    "Cannot Predict now",
-    "Very Doubtful",
-    "Concentrate and Ask Again",
-
-
-]
-
 const config = require("./config.json")
-const token = "config.token" //retrives token
-var client = new Discord.() // Checks if its connected
-// bot.on('','' => { });
+const token = config.token //retrives token
+const client = new Discord.Client();
+// client.on('','' => { });
+
 client.on("ready", function(){ // Tells Console that it is ready to be ran!
     console.log("ready")
 });
-
-
 
 client.on('guildDelete', guild => {
     console.log(`I have left ${guild.name} at ${new Date()}`);
