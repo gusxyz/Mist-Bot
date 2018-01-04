@@ -3,6 +3,7 @@ var ownerID = "82173389657079808"
 const config = require("./config.json")
 const token = config.token //retrives token
 const client = new Discord.Client();
+const Prefix = config.Prefix
 // client.on('','' => { });
 
 client.on("ready", function(){ // Tells Console that it is ready to be ran!
@@ -38,16 +39,6 @@ client.on('guildMemberRemove', member => {
 });
 var guilds = {};
 client.on("message", function(message) { //Makes it so it only reads commands with the "." prefix
-
-  try{
-      if (!guilds[message.guild.id]) {
-          guilds[message.guild.id] = {
-              Prefix: "/" // default prefix, change it to fit your needs
-          };
-      }
-  } catch (e) {
-    console.log(e);
-  }
     if (message.author.equals(client.user)) return;
   if(message.channel.type === 'dm') return message.reply("You cant use me in PM."); // prevent commands via dm
   let arg = message.content.split(" ").slice(1);
@@ -55,7 +46,6 @@ client.on("message", function(message) { //Makes it so it only reads commands wi
   let lgtmfy = arg.join("+")
   let pref = arg.join("")
 let embedText = arg.join(" ")
-  const Prefix = guilds[message.guild.id].Prefix; // multi-guild (will come back to this later)
 const clean = text => {
   if (typeof(text) === "string")
     return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
@@ -67,22 +57,7 @@ const clean = text => {
     if(message.content.startsWith(Prefix + "steal")) {
       message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
     } else
-  if(message.content.startsWith(Prefix + "setprefix")) {
-  if (!message.member.hasPermission("MANAGE_GUILD")) return message.channel.send(`__**Access Denied**__\nYou must have __MANAGE_GUILD__ perms to use this command.`); // Checks for permissions to change the prefix
-  const newPrefix = args; // define the prefixst newPrefix = args.slice(1).join(" "); // define the prefix
-  guilds[message.guild.id].Prefix = newPrefix// set the prefix
-  console.log(Prefix)
-  message.channel.send(`The prefix for **${message.guild.name}** is now **${newPrefix}**`); // reply with the new sexy prefix!
-  } else
-  if(message.content.startsWith(Prefix + "osetprefix")) {
-  if (message.author.id !== "82173389657079808") return message.channel.send(`__**Access Denied**__\nYou must have __MANAGE_GUILD__ perms to use this command.`); // Checks for permissions to change the prefix
-  const newPrefix = args // define the prefix
-  guilds[message.guild.id].Prefix = newPrefix; // set the prefix
-  message.channel.send(`The prefix for **${message.guild.name}** is now **${newPrefix}**`); // reply with the new sexy prefix!
-  } else
-
   if (message.content.startsWith(Prefix + "serverinfo")) {
-
         var embed = new Discord.RichEmbed()
         .setAuthor(message.guild.name, message.guild.iconURL)
         .setColor("RANDOM")
@@ -119,7 +94,7 @@ if (message.content.startsWith(Prefix + "giverole")) {
         console.log(`${args[2]} ${args[3]}`)
 } else
 
-  if (message.content.startsWith(Prefix + "userinfo")) {
+  if (message.content.startsWith(Prefix + "info")) {
     var target = message.mentions.users.first()
           var embed = new Discord.RichEmbed()
         .setAuthor(target.username, target.avatarURL)
