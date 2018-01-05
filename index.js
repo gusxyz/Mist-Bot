@@ -48,11 +48,19 @@ const clean = text => {
   else
       return text;
 }
-
-//Commands Beyond this Point
     if(message.content.match("lol")) {
-    message.react("🍆")
+    message.react("😂")
     } else
+    if(message.content.match("LOL")) {
+    message.react("😂")
+    } else
+    if(message.content.match("LMAO")) {
+    message.react("😂")
+    } else
+    if(message.content.match("lmao")) {
+    message.react("😂")
+    } else
+    //Commands Beyond this Point
     if(message.content.startsWith(Prefix + "steal")) {
       message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
     } else
@@ -72,7 +80,6 @@ const clean = text => {
 
         message.channel.sendEmbed(embed)
   } else
-
  if (message.content.startsWith(Prefix + "eval")) {
     if(message.author.id !== "82173389657079808") return;
     try {
