@@ -6,6 +6,29 @@ const client = new Discord.Client();
 const Prefix = config.Prefix
 // client.on('','' => { });
 
+var Mball = [ //8Ball options
+    "It is certain",
+    "It is decidedly so",
+    "Without a doubt",
+    "Yes definitely",
+    "You may rely on it",
+    "As I see it, yes",
+    "Most Likely",
+    "Outlook Good",
+    "Yes",
+    "Signs Point to yes",
+    "Try Again Later",
+    "Dont Count on it",
+    "My Reply is no",
+    "My sources say no",
+    "Outlook not so good",
+    "Cannot Predict now",
+    "Very Doubtful",
+    "Concentrate and Ask Again",
+
+
+]
+
 client.on("ready", function(){ // Tells Console that it is ready to be ran!
     console.log("ready")
 });
@@ -37,17 +60,19 @@ var guilds = {};
 client.on("message", function(message) {
     if (message.author.equals(client.user)) return;
   if(message.channel.type === 'dm') return message.reply("You cant use me in PM."); // prevent commands via dm
-  let arg = message.content.split(" ").slice(1);
-  let args = arg.join(" ")
-  let lgtmfy = arg.join("+")
-  let pref = arg.join("")
-let embedText = arg.join(" ")
+  const arg = message.content.split(" ").slice(1);
+  const argz = arg.join(" ")
+  const args = message.content.slice(Prefix.length).trim().split(/ +/g);
+  const lgtmfy = arg.join("+")
+  const pref = arg.join("")
 const clean = text => {
   if (typeof(text) === "string")
     return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
   else
       return text;
 }
+
+    //Auto Reaction to these word k
     if(message.content.match("lol")) {
     message.react("😂")
     } else
@@ -64,7 +89,7 @@ const clean = text => {
     if(message.content.startsWith(Prefix + "steal")) {
       message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
     } else
-  if (message.content.startsWith(Prefix + "serverinfo")) {
+  if (message.content.startsWith(Prefix + "serverinfo")) {  
         var embed = new Discord.RichEmbed()
         .setAuthor(message.guild.name, message.guild.iconURL)
         .setColor("RANDOM")
@@ -148,8 +173,8 @@ message.channel.send(`http://lmgtfy.com/?q=${lgtmfy}`)
            .setDescription(`You rolled a ${random}`)
            message.channel.send("", {embed: embed});
         } else
-        if(message.content.startsWith(Prefix + "say")) {
-message.channel.send(args)
+          if(message.content.startsWith(Prefix + "say")) {
+            message.channel.send(argz)
 } else
 if (message.content.startsWith(Prefix + "8ball")) {
             if(args[1]) {
@@ -167,6 +192,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
   } else
     if (message.content.startsWith(Prefix + "ban")) {
             var user = message.mentions.users.first();
+            if(!message.member.roles.some(r=>["Moderator"].includes(r.name)) )   return;
             if(!user) return message.reply("Mention someone to ban them!");
             message.guild.fetchMember(user).then(m => m.ban());
             var embed = new Discord.RichEmbed()
@@ -192,7 +218,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
               .setColor("RANDOM")
               .addField("User", `${target.tag}`)
               .addField("Moderator", `${message.author.tag}`)
-              .addField("Reason", args[3])
+              .addField("Reason",  args[2])
               .setFooter(`Lockebot Mute`)
               message.channel.sendEmbed(embed);
       } else
@@ -208,9 +234,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
               .setFooter(`Lockebot Kick`)
               message.channel.sendEmbed(embed);
             message.guild.fetchMember(target).then(m => m.kick());
-
-
-           } else
+          } else
            if (message.content.startsWith(Prefix + "die")) {
                message.author.kick()
            } else
