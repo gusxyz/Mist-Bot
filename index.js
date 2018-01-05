@@ -33,12 +33,8 @@ client.on('guildMemberAdd', member => {
     let guild = member.guild;
 });
 
-client.on('guildMemberRemove', member => {
-    let guild = member.guild;
-    guild.defaultChannel.send(`You will be missed ${member.user}`)
-});
 var guilds = {};
-client.on("message", function(message) { //Makes it so it only reads commands with the "." prefix
+client.on("message", function(message) {
     if (message.author.equals(client.user)) return;
   if(message.channel.type === 'dm') return message.reply("You cant use me in PM."); // prevent commands via dm
   let arg = message.content.split(" ").slice(1);
@@ -54,6 +50,9 @@ const clean = text => {
 }
 
 //Commands Beyond this Point
+    if(message.content.match("lol")) {
+    message.react("🍆")
+    } else
     if(message.content.startsWith(Prefix + "steal")) {
       message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
     } else
@@ -91,7 +90,6 @@ const clean = text => {
 if (message.content.startsWith(Prefix + "giverole")) {
         var mtarget = message.guild.member(message.mentions.users.first())
         mtarget.addRole(message.guild.roles.find("name", `${args[2]} ${args[3]}`));
-        console.log(`${args[2]} ${args[3]}`)
 } else
 
   if (message.content.startsWith(Prefix + "userinfo")) {
@@ -118,7 +116,6 @@ if (message.content.startsWith(Prefix + "giverole")) {
 message.channel.send(`http://lmgtfy.com/?q=${lgtmfy}`)
 } else
       if (message.content.startsWith(Prefix + "info")) {
-
              var embed = new Discord.RichEmbed()
                 .setColor(0x4BF92E)
                 .setTitle("Information")
@@ -159,7 +156,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
 } else
 
   if (message.content.startsWith(Prefix + "noticeme")) {
-            message.channel.send(message.author.toString() + " You have been noticed by the almighty Locke Bot") //Retrieves author and sends message
+            message.reply("You have been noticed by the almighty Locke Bot")
   } else
     if (message.content.startsWith(Prefix + "ban")) {
             var user = message.mentions.users.first();
@@ -224,6 +221,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
 */
         if (message.content.startsWith(Prefix + "help")) {
         message.reply(":white_check_mark: I have sent a list of commands to you check your DM's :white_check_mark:")
+        message.author.send()
         var embed = new Discord.RichEmbed()
                 .setColor(0x4BF92E)
                 .setFooter("More Commands Coming Send me Ideas at Dawn#7610")
