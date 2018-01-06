@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-var ownerID = "82173389657079808"
+var owner = "82173389657079808"
 const config = require("./config.json")
 const token = config.token //retrives token
 const client = new Discord.Client();
@@ -68,27 +68,12 @@ client.on("message", function(message) {
   const args = message.content.slice(Prefix.length).trim().split(/ +/g);
   const lgtmfy = arg.join("+")
   const pref = arg.join("")
-const clean = text => {
-    if (!points[message.author.id]) points[message.author.id] = {
-      points: 0,
-      level: 0
-    };
-    let userData = points[message.author.id];
-    userData.points++;
-
-    let curLevel = Math.floor(0.1 * Math.sqrt(userData.points));
-    if (curLevel > userData.level) {
-      // Level up!
-      userData.level = curLevel;
-      message.reply(`You"ve leveled up to level **${curLevel}**! Ain"t that dandy?`);
-    }
-  if (typeof(text) === "string")
-    return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-  else
-      return text;
-}
-
-    //Auto Reaction to these word k
+  const clean = text => {
+    if (typeof(text) === "string")
+      return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+    else
+        return text;
+  }    //Auto Reaction to these word k
     if(message.content.toLowerCase().match("lol")) {
     message.react("😂")
     } else
@@ -165,10 +150,10 @@ const clean = text => {
     }
  } else
 if (message.content.toLowerCase().startsWith(Prefix + "giverole")) {
+        if(message.author.id !== "82173389657079808") return;
         var mtarget = message.guild.member(message.mentions.users.first())
         mtarget.addRole(message.guild.roles.find("name", `${args[2]} ${args[3]}`));
 } else
-
   if (message.content.toLowerCase().startsWith(Prefix + "userinfo")) {
     var mtarget = message.guild.member(message.mentions.users.first())
     var target = message.mentions.users.first()
@@ -309,9 +294,9 @@ if (message.content.toLowerCase().startsWith(Prefix + "noticeme")) {
                 .setFooter("More Commands Coming Send me Ideas at Dawn#7610")
                 .setTitle("Commands")
                 .addField("Prefix", Prefix, true)
-                .addField("Commands", "noticeme, 8ball, info, dice, embed, lmgtfy [string],", true)
+                .addField("Commands", "noticeme, 8ball, info, dice, embed, lmgtfy [string], joke, gif, chuckjoke", true)
                 .addField("Mod Commands", "Kick,(kick) Ban", true)
-                .addField("Notes", "Kick is mediocore and could use some work ")
+                .addField("Notes", "None")
                 message.author.sendEmbed(embed);
         }
       });
