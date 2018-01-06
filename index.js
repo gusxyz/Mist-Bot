@@ -4,6 +4,7 @@ const config = require("./config.json")
 const token = config.token //retrives token
 const client = new Discord.Client();
 const Prefix = config.Prefix
+const fs = require("fs");
 // client.on('','' => { });
 
 var Mball = [ //8Ball options
@@ -66,6 +67,19 @@ client.on("message", function(message) {
   const lgtmfy = arg.join("+")
   const pref = arg.join("")
 const clean = text => {
+    if (!points[message.author.id]) points[message.author.id] = {
+      points: 0,
+      level: 0
+    };
+    let userData = points[message.author.id];
+    userData.points++;
+
+    let curLevel = Math.floor(0.1 * Math.sqrt(userData.points));
+    if (curLevel > userData.level) {
+      // Level up!
+      userData.level = curLevel;
+      message.reply(`You"ve leveled up to level **${curLevel}**! Ain"t that dandy?`);
+    }
   if (typeof(text) === "string")
     return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
   else
@@ -73,23 +87,17 @@ const clean = text => {
 }
 
     //Auto Reaction to these word k
-    if(message.content.match("lol")) {
+    if(message.content.toLowerCase().match("lol")) {
     message.react("😂")
     } else
-    if(message.content.match("LOL")) {
-    message.react("😂")
-    } else
-    if(message.content.match("LMAO")) {
-    message.react("😂")
-    } else
-    if(message.content.match("lmao")) {
+    if(message.content.toLowerCase().match("lmao")) {
     message.react("😂")
     } else
     //Commands Beyond this Point
-    if(message.content.startsWith(Prefix + "steal")) {
+    if(message.content.toLowerCase().startsWith(Prefix + "steal")) {
       message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
     } else
-  if (message.content.startsWith(Prefix + "serverinfo")) {  
+  if (message.content.toLowerCase().startsWith(Prefix + "serverinfo")) {
         var embed = new Discord.RichEmbed()
         .setAuthor(message.guild.name, message.guild.iconURL)
         .setColor("RANDOM")
@@ -105,7 +113,7 @@ const clean = text => {
 
         message.channel.sendEmbed(embed)
   } else
- if (message.content.startsWith(Prefix + "eval")) {
+ if (message.content.toLowerCase().startsWith(Prefix + "eval")) {
     if(message.author.id !== "82173389657079808") return;
     try {
       const code = arg.join(" ");
@@ -119,12 +127,12 @@ const clean = text => {
       message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
  } else
-if (message.content.startsWith(Prefix + "giverole")) {
+if (message.content.toLowerCase().startsWith(Prefix + "giverole")) {
         var mtarget = message.guild.member(message.mentions.users.first())
         mtarget.addRole(message.guild.roles.find("name", `${args[2]} ${args[3]}`));
 } else
 
-  if (message.content.startsWith(Prefix + "userinfo")) {
+  if (message.content.toLowerCase().startsWith(Prefix + "userinfo")) {
     var mtarget = message.guild.member(message.mentions.users.first())
     var target = message.mentions.users.first()
     if(target) {
@@ -144,10 +152,10 @@ if (message.content.startsWith(Prefix + "giverole")) {
       }
 
   } else
- if (message.content.startsWith(Prefix + "lmgtfy")) {
+ if (message.content.toLowerCase().startsWith(Prefix + "lmgtfy")) {
 message.channel.send(`http://lmgtfy.com/?q=${lgtmfy}`)
 } else
-      if (message.content.startsWith(Prefix + "info")) {
+      if (message.content.toLowerCase().startsWith(Prefix + "info")) {
              var embed = new Discord.RichEmbed()
                 .setColor(0x4BF92E)
                 .setTitle("Information")
@@ -161,36 +169,41 @@ message.channel.send(`http://lmgtfy.com/?q=${lgtmfy}`)
                 .addField("Notes", "No Development Notes Currently")
                 message.channel.send("", {embed: embed});
       } else
-        if (message.content.startsWith(Prefix + "embed")) {
+        if (message.content.toLowerCase().startsWith(Prefix + "embed")) {
              var embed = new Discord.RichEmbed()
                  .setColor("RANDOM")
                 .setDescription(embedText.join(" "))
             message.channel.send("", {embed: embed});
         } else
-        if (message.content.startsWith(Prefix + "dice")) {
+        if (message.content.toLowerCase().startsWith(Prefix + "dice")) {
         var random = Math.ceil(Math.random() * 20);
         var embed = new Discord.RichEmbed()
            .setDescription(`You rolled a ${random}`)
            message.channel.send("", {embed: embed});
         } else
-          if(message.content.startsWith(Prefix + "say")) {
+          if(message.content.toLowerCase().startsWith(Prefix + "say")) {
             message.channel.send(argz)
 } else
-if (message.content.startsWith(Prefix + "8ball")) {
+if (message.content.toLowerCase().startsWith(Prefix + "8ball")) {
+            var xd = args[1]
+            var imp = xd.length - 1
             if(args[1]) {
+            if(xd.substring(imp,xd.length) === "?") {
             var embed = new Discord.RichEmbed()
                   .setColor("RANDOM")
                   .setDescription(Mball[Math.floor(Math.random() * Mball.length)])
                   message.channel.sendEmbed(embed);
                 } else {
+                  message.reply("Make sure its a question Hint: Use a question mark dumbo")
+                }
+                } else {
                  message.channel.send("Can't read that");
-             }
-} else
-
-  if (message.content.startsWith(Prefix + "noticeme")) {
+               }
+            } else
+if (message.content.toLowerCase().startsWith(Prefix + "noticeme")) {
             message.reply("You have been noticed by the almighty Locke Bot")
   } else
-    if (message.content.startsWith(Prefix + "ban")) {
+    if (message.content.toLowerCase().startsWith(Prefix + "ban")) {
             var user = message.mentions.users.first();
             if(!message.member.roles.some(r=>["Moderator"].includes(r.name)) )   return;
             if(!user) return message.reply("Mention someone to ban them!");
@@ -204,12 +217,12 @@ if (message.content.startsWith(Prefix + "8ball")) {
                   message.channel.sendEmbed(embed);
     } else
 
-      if (message.content.startsWith(Prefix + "purge")) {
+      if (message.content.toLowerCase().startsWith(Prefix + "purge")) {
         if(message.author.id !== "82173389657079808") return;
         var messagecount = parseInt(args);
         message.channel.fetchMessages({limit: messagecount}).then(messages => message.channel.bulkDelete(messages));
       } else
-        if (message.content.startsWith(Prefix + "mute")) {
+        if (message.content.toLowerCase().startsWith(Prefix + "mute")) {
       var mtarget = message.guild.member(message.mentions.users.first())
       var target = message.mentions.users.first()
       if(!message.member.roles.some(r=>["Moderator"].includes(r.name)) )   return;
@@ -222,7 +235,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
               .setFooter(`Lockebot Mute`)
               message.channel.sendEmbed(embed);
       } else
-           if (message.content.startsWith(Prefix + "kick")) {
+           if (message.content.toLowerCase().startsWith(Prefix + "kick")) {
 
       var target = message.mentions.users.first()
       if(!message.member.roles.some(r=>["Moderator"].includes(r.name)) )   return;
@@ -235,7 +248,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
               message.channel.sendEmbed(embed);
             message.guild.fetchMember(target).then(m => m.kick());
           } else
-           if (message.content.startsWith(Prefix + "die")) {
+           if (message.content.toLowerCase().startsWith(Prefix + "die")) {
                message.author.kick()
            } else
       /*case "giverole":
@@ -250,7 +263,7 @@ if (message.content.startsWith(Prefix + "8ball")) {
       console.log(args[2])
       break;
 */
-        if (message.content.startsWith(Prefix + "help")) {
+        if (message.content.toLowerCase().startsWith(Prefix + "help")) {
         message.reply(":white_check_mark: I have sent a list of commands to you check your DM's :white_check_mark:")
         message.author.send()
         var embed = new Discord.RichEmbed()
@@ -263,7 +276,5 @@ if (message.content.startsWith(Prefix + "8ball")) {
                 .addField("Notes", "Kick is mediocore and could use some work ")
                 message.author.sendEmbed(embed);
         }
-
-})
-
+      });
 client.login(token);
