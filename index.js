@@ -122,6 +122,18 @@ const clean = text => {
       message.channel.sendEmbed(embed)
       });
     }
+    if (message.content.toLowerCase().startsWith(Prefix + "chuckjoke")) {
+      request(config.api_key3, function (error, response, body) {
+      var data = JSON.parse(body).value
+      var chucknorris = data["joke"]
+      var embed = new Discord.RichEmbed()
+            .setColor("RANDOM")
+            .setTitle(`Chuck Norris joke`)
+            .setDescription(chucknorris)
+            .setFooter(`ID #${data["id"]}`)
+      message.channel.sendEmbed(embed)
+      });
+    }
   if (message.content.toLowerCase().startsWith(Prefix + "serverinfo")) {
         var embed = new Discord.RichEmbed()
         .setAuthor(message.guild.name, message.guild.iconURL)
@@ -207,10 +219,11 @@ message.channel.send(`http://lmgtfy.com/?q=${lgtmfy}`)
            message.channel.send("", {embed: embed});
         } else
           if(message.content.toLowerCase().startsWith(Prefix + "say")) {
+            if(argz.match("@everyone") || argz.match("@here")) return;
             message.channel.send(argz)
 } else
 if (message.content.toLowerCase().startsWith(Prefix + "8ball")) {
-            var xd = args[1]
+            var xd = argz
             var imp = xd.length - 1
             if(args[1]) {
             if(xd.substring(imp,xd.length) === "?") {
