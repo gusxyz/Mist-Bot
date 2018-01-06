@@ -5,6 +5,7 @@ const token = config.token //retrives token
 const client = new Discord.Client();
 const Prefix = config.Prefix
 const fs = require("fs");
+var request = require('request');
 // client.on('','' => { });
 
 var Mball = [ //8Ball options
@@ -29,6 +30,7 @@ var Mball = [ //8Ball options
 
 
 ]
+
 
 client.on("ready", function(){ // Tells Console that it is ready to be ran!
     console.log("ready")
@@ -97,6 +99,29 @@ const clean = text => {
     if(message.content.toLowerCase().startsWith(Prefix + "steal")) {
       message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
     } else
+    if (message.content.toLowerCase().startsWith(Prefix + "gif")) {
+      request(config.api_key2, function (error, response, body) {
+      var data = JSON.parse(body).data
+      var image = data["image_url"]
+      message.channel.send(image)
+      });
+    } else
+    if (message.content.toLowerCase().startsWith(Prefix + "joke")) {
+      request(config.api_key1, function (error, response, body) {
+      var data = JSON.parse(body)
+      var setup = data["setup"]
+      var punchline = data["punchline"]
+      var sentence = `${setup}..${punchline}`
+      var utype = data["type"]
+      var type = utype.charAt(0).toUpperCase() + utype.slice(1);
+      var embed = new Discord.RichEmbed()
+            .setColor("RANDOM")
+            .setTitle(`${type} joke`)
+            .setDescription(sentence)
+            .setFooter(`ID #${data["id"]}`)
+      message.channel.sendEmbed(embed)
+      });
+    }
   if (message.content.toLowerCase().startsWith(Prefix + "serverinfo")) {
         var embed = new Discord.RichEmbed()
         .setAuthor(message.guild.name, message.guild.iconURL)

@@ -9,6 +9,7 @@
   "author": "Dawn#7610",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.2.1"
+    "discord.js": "^11.2.1",
+    "giphy-api": "^1.2.7"
   }
 }

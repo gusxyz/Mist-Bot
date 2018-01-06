@@ -1,3 +1,6 @@
 {
-"token": "urtokenhere"
+"token": "token",
+"Prefix": "prefix",
+"api_key1": "api",
+"api_key2": "api"
 }
