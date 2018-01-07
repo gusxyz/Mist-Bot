@@ -83,9 +83,22 @@ client.on("message", function(message) {
     message.react("😂")
   } else
     //Commands Beyond this Point
-    if (message.content.toLowerCase().startsWith(Prefix + "steal")) {
-      message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
+    if (message.content.toLowerCase().startsWith(Prefix + "rbxinfo")) {
+      request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
+        var data = JSON.parse(body)
+        var username = data["Username"]
+        var iD = data["Id"]
+        var embed = new Discord.RichEmbed()
+          .setColor("RANDOM")
+          .setTitle(`${username}'s ROBLOX info`)
+          .addField("Username:", username)
+          .addField("UserId", iD)
+        message.channel.sendEmbed(embed)
+      });
     } else
+  if (message.content.toLowerCase().startsWith(Prefix + "steal")) {
+    message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
+  } else
   if (message.content.toLowerCase().startsWith(Prefix + "gif")) {
     request(config.api_key2, function(error, response, body) {
       var data = JSON.parse(body).data
@@ -96,19 +109,16 @@ client.on("message", function(message) {
   if (message.content.toLowerCase().startsWith(Prefix + "joke")) {
     request(config.api_key1, function(error, response, body) {
       var data = JSON.parse(body)
-      var setup = data["setup"]
-      var punchline = data["punchline"]
-      var sentence = `${setup}..${punchline}`
-      var utype = data["type"]
-      var type = utype.charAt(0).toUpperCase() + utype.slice(1);
+      var joke = data["joke"]
+      var type = data["category"]
       var embed = new Discord.RichEmbed()
         .setColor("RANDOM")
         .setTitle(`${type} joke`)
-        .setDescription(sentence)
-        .setFooter(`ID #${data["id"]}`)
+        .setDescription(joke)
+        .setFooter(`Joke from webknox.com`)
       message.channel.sendEmbed(embed)
     });
-  }
+  } else
   if (message.content.toLowerCase().startsWith(Prefix + "chuckjoke")) {
     request(config.api_key3, function(error, response, body) {
       var data = JSON.parse(body).value
@@ -120,7 +130,7 @@ client.on("message", function(message) {
         .setFooter(`ID #${data["id"]}`)
       message.channel.sendEmbed(embed)
     });
-  }
+  } else
   if (message.content.toLowerCase().startsWith(Prefix + "serverinfo")) {
     var embed = new Discord.RichEmbed()
       .setAuthor(message.guild.name, message.guild.iconURL)
