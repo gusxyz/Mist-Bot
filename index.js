@@ -86,7 +86,6 @@ client.on("message", function(message) {
     //Commands Beyond this Point
     if (message.content.toLowerCase().startsWith(Prefix + "rbxinfo")) {
       request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
-        getBadges(argz)
         var data = JSON.parse(body)
         var username = data["Username"]
         var iD = data["Id"]
