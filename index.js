@@ -84,19 +84,7 @@ client.on("message", function(message) {
     message.react("😂")
   } else
     //Commands Beyond this Point
-    if (message.content.toLowerCase().startsWith(Prefix + "rbxinfo")) {
-      request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
-        var data = JSON.parse(body)
-        var username = data["Username"]
-        var iD = data["Id"]
-        var embed = new Discord.RichEmbed()
-          .setColor("RANDOM")
-          .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId=${iD}`)
-          .setTitle(`${username}'s ROBLOX info`)
-          .addField("Username:", username)
-          .addField("UserId", iD)
-            });
-} else
+
   if (message.content.toLowerCase().startsWith(Prefix + "steal")) {
     message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
   } else
@@ -120,6 +108,20 @@ client.on("message", function(message) {
       message.channel.sendEmbed(embed)
     });
   } else
+  if (message.content.toLowerCase().startsWith(Prefix + "rbxinfo")) {
+    request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
+      var data = JSON.parse(body)
+      var username = data["Username"]
+      var iD = data["Id"]
+      var embed = new Discord.RichEmbed()
+        .setColor("RANDOM")
+        .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId=${iD}`)
+        .setTitle(`${username}'s ROBLOX info`)
+        .addField("Username:", username)
+        .addField("UserId", iD)
+        message.channel.sendEmbed(embed)
+          });
+} else
   if (message.content.toLowerCase().startsWith(Prefix + "chuckjoke")) {
     request(config.api_key3, function(error, response, body) {
       var data = JSON.parse(body).value
