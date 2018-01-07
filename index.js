@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 var owner = "82173389657079808"
 const config = require("./config.json")
+const package = require("./package.json")
 const token = config.token //retrives token
 const client = new Discord.Client();
 const Prefix = config.Prefix
@@ -197,7 +198,7 @@ client.on("message", function(message) {
       .setTitle("Information")
       .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Gadsden_flag.svg/1200px-Gadsden_flag.svg.png")
       .addField("Author", "Dawn", true)
-      .addField("Version", "0.5.5", true)
+      .addField("Version", package.version, true)
       .addField("Server Count", client.guilds.size, true)
       .addField("Purpose", "Locke Bot is a multi purpose bot that includes fun, moderation and other commands to make a complete useful and working bot")
       .addField("Stage", "Alpha")
