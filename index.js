@@ -11,7 +11,7 @@ var Trello = require("trello");
 var trello = new Trello("4ab69a6f55784a8a21e6f2f154c6fc75", "5dfea0e2aa20920451e23eb5ac95fca81a2cc8019d02bd7c683b0937b35622d5");
 // client.on('','' => { });
 
-var Mball = [ //8Ball options
+var Mball =   [ //8Ball options
   "It is certain",
   "It is decidedly so",
   "Without a doubt",
@@ -31,6 +31,7 @@ var Mball = [ //8Ball options
   "Very Doubtful",
   "Concentrate and Ask Again"
 ]
+
 client.on("ready", function() { // Tells Console that it is ready to be ran!
   console.log("ready")
 });
