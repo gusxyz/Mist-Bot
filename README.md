@@ -6,5 +6,5 @@ If you do use LockeBot find a way to give me credit..
 ### Links
 [Trello](https://trello.com/b/GHey2RWR/locke-bot)
 ---
-#Thanks for reading!
+## Thanks for reading!
 
