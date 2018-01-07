@@ -3,7 +3,7 @@ LockeBot is a easy to use fast leightweight bot thats pretty awesome. I mean its
 ---
 # Important Information
 If you do use LockeBot find a way to give me credit..
-###Links
+### Links
 [Trello](https://trello.com/b/GHey2RWR/locke-bot)
 ---
 #Thanks for reading!
