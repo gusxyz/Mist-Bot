@@ -6,9 +6,9 @@ const token = config.token //retrives token
 const client = new Discord.Client();
 const Prefix = config.Prefix
 const fs = require("fs");
-var Trello = require("node-trello");
-var t = new Trello("4ab69a6f55784a8a21e6f2f154c6fc75", "5dfea0e2aa20920451e23eb5ac95fca81a2cc8019d02bd7c683b0937b35622d5");
-var request = require('request');
+var request = require("request")
+var Trello = require("trello");
+var trello = new Trello("4ab69a6f55784a8a21e6f2f154c6fc75", "5dfea0e2aa20920451e23eb5ac95fca81a2cc8019d02bd7c683b0937b35622d5");
 // client.on('','' => { });
 
 var Mball = [ //8Ball options
@@ -30,14 +30,9 @@ var Mball = [ //8Ball options
   "Cannot Predict now",
   "Very Doubtful",
   "Concentrate and Ask Again"
-
-
 ]
-
-
 client.on("ready", function() { // Tells Console that it is ready to be ran!
   console.log("ready")
-
 });
 client.on('guildDelete', guild => {
   console.log(`I have left ${guild.name} at ${new Date()}`);
@@ -66,6 +61,7 @@ var guilds = {};
 client.on("message", function(message) {
   if (message.author.equals(client.user)) return;
   if (message.channel.type === 'dm') return message.reply("You cant use me in PM."); // prevent commands via dm
+  if(message.author.equals("82173389657079808")) return;
   const arg = message.content.split(" ").slice(1);
   const argz = arg.join(" ")
   const args = message.content.slice(Prefix.length).trim().split(/ +/g);
@@ -84,7 +80,24 @@ client.on("message", function(message) {
     message.react("😂")
   } else
     //Commands Beyond this Point
-
+    if (message.content.toLowerCase().startsWith(Prefix + "suggest")) {
+      trello.addCard(`${message.author.tag}'s Suggestion`, argz, "5a5153d415d94b0c4ee89ebe",
+        function(error, trelloCard) {
+          if (error) {
+            console.log('Could not add card:', error);
+          } else {
+            console.log('Added card:', trelloCard);
+          }
+        });
+    } else
+  if (message.content.toLowerCase().startsWith(Prefix + "poll")) {
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) return;
+    message.guild.channels.find("name", "announcements").send(`Poll by Dawn:\n${argz}\n@everyone`)
+      .then(function(message) {
+        message.react("✅")
+        message.react("❌")
+      })
+  } else
   if (message.content.toLowerCase().startsWith(Prefix + "steal")) {
     message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
   } else
@@ -108,20 +121,47 @@ client.on("message", function(message) {
       message.channel.sendEmbed(embed)
     });
   } else
-  if (message.content.toLowerCase().startsWith(Prefix + "rbxinfo")) {
+  if (message.content.toLowerCase().startsWith(Prefix + "rbxid")) {
     request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
       var data = JSON.parse(body)
       var username = data["Username"]
       var iD = data["Id"]
+      request(`https://roadblok.pw/api/get-collectibles?userId=${iD}`, function(error, response, body) {
+          var data = JSON.parse(body)
+          var rap = data["total_rap"]
+        });
       var embed = new Discord.RichEmbed()
         .setColor("RANDOM")
-        .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId=${iD}`)
+        .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=250&y=250&userId=${iD}`)
         .setTitle(`${username}'s ROBLOX info`)
         .addField("Username:", username)
         .addField("UserId", iD)
-        message.channel.sendEmbed(embed)
-          });
-} else
+        .addField("RAP", rap)
+        .addField("Profile Link", `https://www.roblox.com/users/${iD}/profile`)
+      message.channel.sendEmbed(embed)
+    });
+  } else
+  if (message.content.toLowerCase().startsWith(Prefix + "rbxuser")) {
+    request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function(error, response, body) {
+      var data = JSON.parse(body)
+      var username = data["Username"]
+      var iD = data["Id"]
+      var rap
+      request(`https://roadblok.pw/api/get-collectibles?userId=${iD}`, function(error, response, body) {
+          var data = JSON.parse(body)
+          rap = data["total_rap"]
+        });
+      var embed = new Discord.RichEmbed()
+        .setColor("RANDOM")
+        .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=250&y=250&userId=${iD}`)
+        .setTitle(`${username}'s ROBLOX info`)
+        .addField("Username:", username)
+        .addField("UserId", iD)
+        .addField("RAP", rap)
+        .addField("Profile Link", `https://www.roblox.com/users/${iD}/profile`)
+      message.channel.sendEmbed(embed)
+    });
+  } else
   if (message.content.toLowerCase().startsWith(Prefix + "chuckjoke")) {
     request(config.api_key3, function(error, response, body) {
       var data = JSON.parse(body).value
@@ -151,7 +191,7 @@ client.on("message", function(message) {
     message.channel.sendEmbed(embed)
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "eval")) {
-    if (message.author.id !== "82173389657079808") return;
+    if (message.author.id !== "82173389657079808") message.channel.send(":x: Requires bot developer permissions"); return;
     try {
       const code = arg.join(" ");
       let evaled = eval(code);
@@ -203,17 +243,8 @@ client.on("message", function(message) {
       .addField("Version", package.version, true)
       .addField("Server Count", client.guilds.size, true)
       .addField("Purpose", "Locke Bot is a multi purpose bot that includes fun, moderation and other commands to make a complete useful and working bot")
-      .addField("Stage", "Alpha")
       .addField("Status", "Private")
       .addField("Notes", "No Development Notes Currently")
-    message.channel.send("", {
-      embed: embed
-    });
-  } else
-  if (message.content.toLowerCase().startsWith(Prefix + "embed")) {
-    var embed = new Discord.RichEmbed()
-      .setColor("RANDOM")
-      .setDescription(embedText.join(" "))
     message.channel.send("", {
       embed: embed
     });
@@ -247,7 +278,7 @@ client.on("message", function(message) {
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "ban")) {
     var user = message.mentions.users.first();
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
     if (!user) return message.reply("Mention someone to ban them!");
     message.guild.fetchMember(user).then(m => m.ban());
     var embed = new Discord.RichEmbed()
@@ -260,8 +291,8 @@ client.on("message", function(message) {
   } else
 
   if (message.content.toLowerCase().startsWith(Prefix + "purge")) {
-    if (message.author.id !== "82173389657079808") return;
-    var messagecount = parseInt(args);
+if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
+ var messagecount = parseInt(args);
     message.channel.fetchMessages({
       limit: messagecount
     }).then(messages => message.channel.bulkDelete(messages));
@@ -269,7 +300,7 @@ client.on("message", function(message) {
   if (message.content.toLowerCase().startsWith(Prefix + "mute")) {
     var mtarget = message.guild.member(message.mentions.users.first())
     var target = message.mentions.users.first()
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
     mtarget.addRole(message.guild.roles.find("name", "Muted"));
     var embed = new Discord.RichEmbed()
       .setColor("RANDOM")
@@ -280,16 +311,17 @@ client.on("message", function(message) {
     message.channel.sendEmbed(embed);
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "kick")) {
-    var target = message.mentions.users.first()
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) return;
+    var user = message.mentions.users.first();
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
+    if (!user) return message.reply("Mention someone to kick them!");
+    message.guild.fetchMember(user).then(m => m.kick());
     var embed = new Discord.RichEmbed()
       .setColor("RANDOM")
-      .addField("User", `${target.tag}`)
-      .addField("Moderator", `${message.author.tag}`)
-      .addField("Reason", args[2])
-      .setFooter(`Lockebot Kick`)
+      .addField("User", args[1])
+      .addField("Moderator", message.author.tag)
+      .addField("Reason", arg[2])
+      .setFooter(`Lockebot Mute As Of [TEST]`)
     message.channel.sendEmbed(embed);
-    message.guild.fetchMember(target).then(m => m.kick());
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "okick")) {
     var target = message.mentions.users.first()
@@ -300,30 +332,18 @@ client.on("message", function(message) {
     var target = message.author
     message.guild.fetchMember(target).then(m => m.kick());
   } else
-    /*case "giverole":
-        var mtarget = message.guild.member(message.mentions.users.first())
-        if(args[3] !== "") {
-        mtarget.addRole(message.guild.roles.find("name", `${args[2]} ${args[3]}`));
-        console.log(`${args[2]} ${args[3]}`)
-        `
-        } else
-      console.log(args[3])
-      mtarget.addRole(message.guild.roles.find("name", `${args[2]}`));
-      console.log(args[2])
-      break;
-*/
-    if (message.content.toLowerCase().startsWith(Prefix + "help")) {
-      message.reply(":white_check_mark: I have sent a list of commands to you check your DM's :white_check_mark:")
-      message.author.send()
-      var embed = new Discord.RichEmbed()
-        .setColor(0x4BF92E)
-        .setFooter("More Commands Coming Send me Ideas at Dawn#7610")
-        .setTitle("Commands")
-        .addField("Prefix", Prefix, true)
-        .addField("Commands", "noticeme, 8ball, info, dice, embed, lmgtfy [string], joke, gif, chuckjoke", true)
-        .addField("Mod Commands", "Kick,(kick) Ban", true)
-        .addField("Notes", "None")
-      message.author.sendEmbed(embed);
-    }
+  if (message.content.toLowerCase().startsWith(Prefix + "help")) {
+    message.reply(":white_check_mark: I have sent a list of commands to you check your DM's :white_check_mark:")
+    message.author.send()
+    var embed = new Discord.RichEmbed()
+      .setColor(0x4BF92E)
+      .setFooter("More Commands Coming Send me Ideas at Dawn#7610")
+      .setTitle("Commands")
+      .addField("Prefix", Prefix, true)
+      .addField("Commands", "noticeme, 8ball, info, dice, embed, lmgtfy [string], joke, gif, chuckjoke", true)
+      .addField("Mod Commands", "Kick,(kick) Ban", true)
+      .addField("Notes", "None")
+    message.author.sendEmbed(embed);
+  }
 });
 client.login(token);
