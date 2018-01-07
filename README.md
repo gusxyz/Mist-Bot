@@ -7,4 +7,3 @@ If you do use LockeBot find a way to give me credit..
 [Trello](https://trello.com/b/GHey2RWR/locke-bot)
 ---
 ## Thanks for reading!
-

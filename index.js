@@ -29,7 +29,7 @@ var Mball = [ //8Ball options
   "Outlook not so good",
   "Cannot Predict now",
   "Very Doubtful",
-  "Concentrate and Ask Again",
+  "Concentrate and Ask Again"
 
 
 ]
@@ -86,17 +86,18 @@ client.on("message", function(message) {
     //Commands Beyond this Point
     if (message.content.toLowerCase().startsWith(Prefix + "rbxinfo")) {
       request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
+        getBadges(argz)
         var data = JSON.parse(body)
         var username = data["Username"]
         var iD = data["Id"]
         var embed = new Discord.RichEmbed()
           .setColor("RANDOM")
+          .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId=${iD}`)
           .setTitle(`${username}'s ROBLOX info`)
           .addField("Username:", username)
           .addField("UserId", iD)
-        message.channel.sendEmbed(embed)
-      });
-    } else
+            });
+} else
   if (message.content.toLowerCase().startsWith(Prefix + "steal")) {
     message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
   } else
@@ -224,12 +225,6 @@ client.on("message", function(message) {
       embed: embed
     });
   } else
-  if (message.content.toLowerCase().startsWith(Prefix + "say")) {
-    if (argz.match("@everyone") || argz.match("@here")) return;
-    message.channel.send(argz)
-
-  } else
-
   if (message.content.toLowerCase().startsWith(Prefix + "8ball")) {
     var xd = argz
     var imp = xd.length - 1
