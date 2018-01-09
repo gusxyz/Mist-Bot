@@ -324,7 +324,7 @@ if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.cha
       .setFooter(`Lockebot Mute As Of [TEST]`)
     message.channel.sendEmbed(embed);
   } else
-  if (message.content.toLowerCase().startsWith(Prefix + "okick")) {
+  if (message.content.toLowerCase().startsWith(Prefix + "`okick`")) {
     var target = message.mentions.users.first()
     if (message.author.id !== "82173389657079808") return;
     message.guild.fetchMember(target).then(m => m.kick());
