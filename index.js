@@ -1,14 +1,14 @@
 const Discord = require("discord.js");
-var owner = "82173389657079808"
-const config = require("./config.json")
-const package = require("./package.json")
-const token = config.token //retrives token
-const client = new Discord.Client();
-const Prefix = config.Prefix
 const fs = require("fs");
 var request = require("request")
 var Trello = require("trello");
 var trello = new Trello("4ab69a6f55784a8a21e6f2f154c6fc75", "5dfea0e2aa20920451e23eb5ac95fca81a2cc8019d02bd7c683b0937b35622d5");
+const client = new Discord.Client();
+var owner = "82173389657079808"
+const config = require("./config.json")
+const package = require("./package.json")
+const token = config.token //retrives token
+const Prefix = config.Prefix
 // client.on('','' => { });
 
 var Mball = [ //8Ball options
@@ -57,8 +57,6 @@ client.on('guildCreate', guild => {
 client.on('guildMemberAdd', member => {
   let guild = member.guild;
 });
-
-var guilds = {};
 client.on("message", function (message) {
   if (message.author.equals(client.user)) return;
   if (message.channel.type === 'dm') return message.reply("You cant use me in PM."); // prevent commands via dm
@@ -108,11 +106,6 @@ client.on("message", function (message) {
       var image = data["image_url"]
       message.channel.send(image)
     });
-  } else
-  if (message.content.toLowerCase().startsWith(Prefix + "test")) {
-    request.post('https://trello.com/1/lists/5a64297d5ab10f443dd33d6a/cards', function (err, httpResponse, body) {
-      console.log(body)
-    })
   } else
     /*  if (message.content.toLowerCase().startsWith(Prefix + "joke")) {
         const options = {
@@ -343,13 +336,9 @@ client.on("message", function (message) {
       .setFooter(`Lockebot Mute As Of [TEST]`)
     message.channel.sendEmbed(embed);
   } else
-  if (message.content.toLowerCase().startsWith(Prefix + "`okick`")) {
+  if (message.content.toLowerCase().startsWith(Prefix + "okick")) {
     var target = message.mentions.users.first()
     if (message.author.id !== "82173389657079808") return;
-    message.guild.fetchMember(target).then(m => m.kick());
-  } else
-  if (message.content.toLowerCase().startsWith(Prefix + "die")) {
-    var target = message.author
     message.guild.fetchMember(target).then(m => m.kick());
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "help")) {
