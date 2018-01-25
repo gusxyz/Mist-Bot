@@ -11,7 +11,7 @@ var Trello = require("trello");
 var trello = new Trello("4ab69a6f55784a8a21e6f2f154c6fc75", "5dfea0e2aa20920451e23eb5ac95fca81a2cc8019d02bd7c683b0937b35622d5");
 // client.on('','' => { });
 
-var Mball =   [ //8Ball options
+var Mball = [ //8Ball options
   "It is certain",
   "It is decidedly so",
   "Without a doubt",
@@ -32,7 +32,7 @@ var Mball =   [ //8Ball options
   "Concentrate and Ask Again"
 ]
 
-client.on("ready", function() { // Tells Console that it is ready to be ran!
+client.on("ready", function () { // Tells Console that it is ready to be ran!
   console.log("ready")
 });
 client.on('guildDelete', guild => {
@@ -59,17 +59,17 @@ client.on('guildMemberAdd', member => {
 });
 
 var guilds = {};
-client.on("message", function(message) {
+client.on("message", function (message) {
   if (message.author.equals(client.user)) return;
   if (message.channel.type === 'dm') return message.reply("You cant use me in PM."); // prevent commands via dm
-  if(message.author.equals("82173389657079808")) return;
+  if (message.author.equals("82173389657079808")) return;
   const arg = message.content.split(" ").slice(1);
   const argz = arg.join(" ")
   const args = message.content.slice(Prefix.length).trim().split(/ +/g);
   const lgtmfy = arg.join("+")
   const pref = arg.join("")
   const clean = text => {
-    if (typeof(text) === "string")
+    if (typeof (text) === "string")
       return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
     else
       return text;
@@ -83,7 +83,7 @@ client.on("message", function(message) {
     //Commands Beyond this Point
     if (message.content.toLowerCase().startsWith(Prefix + "suggest")) {
       trello.addCard(`${message.author.tag}'s Suggestion`, argz, "5a5153d415d94b0c4ee89ebe",
-        function(error, trelloCard) {
+        function (error, trelloCard) {
           if (error) {
             console.log('Could not add card:', error);
           } else {
@@ -94,7 +94,7 @@ client.on("message", function(message) {
   if (message.content.toLowerCase().startsWith(Prefix + "poll")) {
     if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) return;
     message.guild.channels.find("name", "announcements").send(`Poll by Dawn:\n${argz}\n@everyone`)
-      .then(function(message) {
+      .then(function (message) {
         message.react("✅")
         message.react("❌")
       })
@@ -103,68 +103,82 @@ client.on("message", function(message) {
     message.channel.send("YOU WANNA STEAL MY CLOUT? :b: :regional_indicator_e: :regional_indicator_g: :regional_indicator_o: :regional_indicator_n: :regional_indicator_e:  :regional_indicator_t: :regional_indicator_h: :regional_indicator_o: :regional_indicator_t:")
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "gif")) {
-    request(config.api_key2, function(error, response, body) {
+    request(config.api_key2, function (error, response, body) {
       var data = JSON.parse(body).data
       var image = data["image_url"]
       message.channel.send(image)
     });
   } else
-  if (message.content.toLowerCase().startsWith(Prefix + "joke")) {
-    request(config.api_key1, function(error, response, body) {
-      var data = JSON.parse(body)
-      var joke = data["joke"]
-      var type = data["category"]
-      var embed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setTitle(`${type} joke`)
-        .setDescription(joke)
-        .setFooter(`Joke from webknox.com`)
-      message.channel.sendEmbed(embed)
-    });
+  if (message.content.toLowerCase().startsWith(Prefix + "test")) {
+    request.post('https://trello.com/1/lists/5a64297d5ab10f443dd33d6a/cards', function (err, httpResponse, body) {
+      console.log(body)
+    })
   } else
-  if (message.content.toLowerCase().startsWith(Prefix + "rbxid")) {
-    request(`http://api.roblox.com/users/${argz}`, function(error, response, body) {
+    /*  if (message.content.toLowerCase().startsWith(Prefix + "joke")) {
+        const options = {
+        method: 'GET',
+        uri: 'https://webknox-jokes.p.mashape.com/jokes/random?maxLength=100',
+        'X-Mashape-Key': config.ap
+    request(options)
+      .then(function (response) {
+        var data = JSON.parse(response)
+        var joke = data["joke"]
+        var type = data["category"]
+        var embed = new Discord.RichEmbed()
+          .setColor("RANDOM")
+          .setTitle(`${type} joke`)
+          .setDescription(joke)
+          .setFooter(`Joke from webknox.com`)
+        message.channel.sendEmbed(embed)  })
+      } else
+    */
+    if (message.content.toLowerCase().startsWith(Prefix + "roblox")) {
+      request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function (error, response, body) {
+        var data = JSON.parse(body)
+        var username = data["Username"]
+        var iD = data["Id"]
+        request(`https://roadblok.pw/api/get-collectibles?userId=${iD}`, function (error, response, body) {
+          var rapster = JSON.parse(body)
+          var rap
+          rap = rapster["total_rap"]
+          request(`https://rprxy.xyz/proxy/api/usernames/${iD}`, function (error, response, body) {
+            var pastnames = JSON.parse(body)
+            var embed = new Discord.RichEmbed()
+              .setColor("RANDOM")
+              .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=250&y=250&userId=${iD}`)
+              .setTitle(`${username}'s ROBLOX info`)
+              .addField("Username:", username)
+              .addField("UserId", iD)
+              .addField("Past Usernames", pastnames)
+              .addField("RAP", rap)
+              .addField("Profile Link", `https://www.roblox.com/users/${iD}/profile`)
+            message.channel.sendEmbed(embed)
+          });
+        });
+      });
+    } else
+  if (message.content.toLowerCase().startsWith(Prefix + "groups")) {
+    request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function (error, response, body) {
       var data = JSON.parse(body)
       var username = data["Username"]
       var iD = data["Id"]
-      request(`https://roadblok.pw/api/get-collectibles?userId=${iD}`, function(error, response, body) {
-          var data = JSON.parse(body)
-          var rap = data["total_rap"]
-        });
-      var embed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=250&y=250&userId=${iD}`)
-        .setTitle(`${username}'s ROBLOX info`)
-        .addField("Username:", username)
-        .addField("UserId", iD)
-        .addField("RAP", rap)
-        .addField("Profile Link", `https://www.roblox.com/users/${iD}/profile`)
-      message.channel.sendEmbed(embed)
-    });
-  } else
-  if (message.content.toLowerCase().startsWith(Prefix + "rbxuser")) {
-    request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function(error, response, body) {
-      var data = JSON.parse(body)
-      var username = data["Username"]
-      var iD = data["Id"]
-      var rap
-      request(`https://roadblok.pw/api/get-collectibles?userId=${iD}`, function(error, response, body) {
-          var data = JSON.parse(body)
-          rap = data["total_rap"]
-        });
-      var embed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setThumbnail(`https://www.roblox.com/Thumbs/Avatar.ashx?x=250&y=250&userId=${iD}`)
-        .setTitle(`${username}'s ROBLOX info`)
-        .addField("Username:", username)
-        .addField("UserId", iD)
-        .addField("RAP", rap)
-        .addField("Profile Link", `https://www.roblox.com/users/${iD}/profile`)
-      message.channel.sendEmbed(embed)
+      request(`http://api.roblox.com/users/${iD}/groups`, function (error, response, body) {
+        var groups = JSON.parse(body)
+        var groupamount = groups.length
+        var i = 0
+        var embed = new Discord.RichEmbed()
+          .setColor("RANDOM")
+          .setTitle(`${username}'s ROBLOX Groups`)
+        while (i < groupamount) {
+          embed.addField(groups[i]["Name"], groups[i]["Role"])
+          i++;
+        }
+        message.channel.sendEmbed(embed)
+      });
     });
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "chuckjoke")) {
-    request(config.api_key3, function(error, response, body) {
+    request(config.api_key3, function (error, response, body) {
       var data = JSON.parse(body).value
       var chucknorris = data["joke"]
       var embed = new Discord.RichEmbed()
@@ -192,7 +206,8 @@ client.on("message", function(message) {
     message.channel.sendEmbed(embed)
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "eval")) {
-    if (message.author.id !== "82173389657079808") message.channel.send(":x: Requires bot developer permissions"); return;
+    if (message.author.id !== "82173389657079808") message.channel.send(":x: Requires bot developer permissions");
+    return;
     try {
       const code = arg.join(" ");
       let evaled = eval(code);
@@ -279,7 +294,8 @@ client.on("message", function(message) {
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "ban")) {
     var user = message.mentions.users.first();
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:");
+    return;
     if (!user) return message.reply("Mention someone to ban them!");
     message.guild.fetchMember(user).then(m => m.ban());
     var embed = new Discord.RichEmbed()
@@ -292,8 +308,9 @@ client.on("message", function(message) {
   } else
 
   if (message.content.toLowerCase().startsWith(Prefix + "purge")) {
-if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
- var messagecount = parseInt(args);
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:");
+    return;
+    var messagecount = parseInt(args);
     message.channel.fetchMessages({
       limit: messagecount
     }).then(messages => message.channel.bulkDelete(messages));
@@ -301,7 +318,8 @@ if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.cha
   if (message.content.toLowerCase().startsWith(Prefix + "mute")) {
     var mtarget = message.guild.member(message.mentions.users.first())
     var target = message.mentions.users.first()
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:");
+    return;
     mtarget.addRole(message.guild.roles.find("name", "Muted"));
     var embed = new Discord.RichEmbed()
       .setColor("RANDOM")
@@ -313,7 +331,8 @@ if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.cha
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "kick")) {
     var user = message.mentions.users.first();
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:");
+    return;
     if (!user) return message.reply("Mention someone to kick them!");
     message.guild.fetchMember(user).then(m => m.kick());
     var embed = new Discord.RichEmbed()
