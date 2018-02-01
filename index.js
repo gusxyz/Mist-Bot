@@ -90,7 +90,7 @@ client.on("message", function (message) {
         });
     } else
   if (message.content.toLowerCase().startsWith(Prefix + "poll")) {
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
     message.guild.channels.find("name", "announcements").send(`Poll by Dawn:\n${argz}\n@everyone`)
       .then(function (message) {
         message.react("✅")
@@ -147,7 +147,7 @@ client.on("message", function (message) {
           .setFooter(`Joke from webknox.com`)
         message.channel.sendEmbed(embed)  })
       } else
-    */
+    */    
     if (message.content.toLowerCase().startsWith(Prefix + "roblox")) {
       request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function (error, response, body) {
         var data = JSON.parse(body)
@@ -334,8 +334,7 @@ client.on("message", function (message) {
   if (message.content.toLowerCase().startsWith(Prefix + "mute")) {
     var mtarget = message.guild.member(message.mentions.users.first())
     var target = message.mentions.users.first()
-    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:");
-    return;
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
     mtarget.addRole(message.guild.roles.find("name", "Muted"));
     var embed = new Discord.RichEmbed()
       .setColor("RANDOM")

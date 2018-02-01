@@ -1,13 +1,13 @@
 {
   "name": "lockebot",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "A Discord Bot for everything :)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Dawn#0038",
-  "license": "ISC",
+  "author": "Dawn,Danny",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^11.2.1",
     "enmap": "^0.4.2",
