@@ -1,8 +1,7 @@
 // FILE 1 : Core
-
 const Discord = require('discord.js');
 const Client = new Discord.Client();
-var prefix = ",";
+var prefix = "/";
 var fs = require('fs');
 var request = require("request")
 var Trello = require("trello");
