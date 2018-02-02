@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+/*const Discord = require("discord.js");
 const fs = require("fs");
 var request = require("request")
 var Trello = require("trello");
@@ -142,7 +142,6 @@ client.on("message", function (message) {
           .setFooter(`Joke from webknox.com`)
         message.channel.sendEmbed(embed)  })
       } else
-    */    
     if (message.content.toLowerCase().startsWith(Prefix + "roblox")) {
       request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function (error, response, body) {
         var data = JSON.parse(body)
@@ -373,3 +372,4 @@ client.on("message", function (message) {
   }
 });
 client.login(token);
+/*
