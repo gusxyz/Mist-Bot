@@ -1,4 +1,4 @@
-/*const Discord = require("discord.js");
+const Discord = require("discord.js");
 const fs = require("fs");
 var request = require("request")
 var Trello = require("trello");
@@ -90,7 +90,12 @@ client.on("message", function (message) {
         });
     } else
   if (message.content.toLowerCase().startsWith(Prefix + "poll")) {
-   
+    if (!message.member.roles.some(r => ["Moderator"].includes(r.name))) message.channel.send(":x: You are not a moderator :hammer:"); return;
+    message.guild.channels.find("name", "announcements").send(`Poll by Dawn:\n${argz}\n@everyone`)
+      .then(function (message) {
+        message.react("✅")
+        message.react("❌")
+      })
   } else
   if (message.content.toLowerCase().startsWith(Prefix + "nytimes")) {
     request({
@@ -142,6 +147,7 @@ client.on("message", function (message) {
           .setFooter(`Joke from webknox.com`)
         message.channel.sendEmbed(embed)  })
       } else
+    */    
     if (message.content.toLowerCase().startsWith(Prefix + "roblox")) {
       request(`https://api.roblox.com/users/get-by-username?username=${argz}`, function (error, response, body) {
         var data = JSON.parse(body)
@@ -372,4 +378,3 @@ client.on("message", function (message) {
   }
 });
 client.login(token);
-/*
