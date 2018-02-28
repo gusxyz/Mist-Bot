@@ -9,10 +9,11 @@
   "author": "Dawn,Danny",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.2.1",
+    "discord.js": "^11.3.0",
     "enmap": "^0.4.2",
     "enmap-level": "^1.0.0",
     "giphy-api": "^1.2.7",
+    "moment": "^2.20.1",
     "request": "^2.83.0"
   }
 }
