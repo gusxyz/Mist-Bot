@@ -13,7 +13,7 @@ const moment = require("moment")
 // client.on('','' => { });
 
 
-client.on("ready", function () {  
+client.on("ready", function () {
   console.log("ready")
 });
 client.on('guildDelete', guild => {
@@ -44,20 +44,20 @@ client.on("message", function (message) {
   const command = message.content.slice(Prefix.length).trim().split(/ +/g).shift().toLowerCase();
 
 
-//Auto Reaction to these word k
+  //Auto Reaction to these word k
   if (message.content.toLowerCase().match("lol")) {
     message.react("😂")
   } else
   if (message.content.toLowerCase().match("lmao")) {
     message.react("😂")
   }
-  if(message.content.match("/")) {
-  try {
-    let commandFile = require(`./commands/${command}.js`);
-    commandFile.run(client, message, args);
-  } catch (err) {
-    console.error(err);
+  if (message.content.match("/")) {
+    try {
+      let commandFile = require(`./commands/${command}.js`);
+      commandFile.run(client, message, args);
+    } catch (err) {
+      console.error(err);
+    }
   }
-}
 });
 client.login(token);
