@@ -1,36 +1,41 @@
 const discord = require('discord.js');
 const request = require('request');
+const subs = ['gonewild','RealGirls','Ass','Asshole','AssOnTheGlass','SpreadEm','Booty','GirlsInYogaPants','GirlsInLeggings','CollegeSluts','CollegeNSFW','FuckYeahDrunkSluts','CumSluts']
 module.exports.run = async (bot, message, args) => {
-   
-  request('https://reddit.com/r/gonewild/random.json', function (error, response, body) {
-    body = JSON.parse(body)
-    var bod = body[0]
-    var data = bod['data']
-    var children = data['children']
-    var childre = children[0]
-    var data2 = childre['data']
-    if(data2['url'].match('.jpg') || data2['url'].match('.png')) {
-    var embed = new discord.RichEmbed()
-    .setColor('RANDOM')
-    .setAuthor('Lockebot')
-    .setTitle('r/gonewild')
-    .setURL(`https://reddit.com${data2['permalink']}`)
-    .setFooter(`Meme by ${data2['author']}`)
-    .setImage(data2['url'])
-    message.channel.send({embed});
+    var sub = subs[Math.floor(Math.random() * subs.length)];
+    console.log(sub)
+
+    if (message.channel.nsfw === true) {
+
+        request(`https://reddit.com/r/${sub}/random.json`, function (error, response, body) {
+            body = JSON.parse(body)
+            var data = body[0]['data']['children'][0]['data']
+            var embed = new discord.RichEmbed()
+            
+            if(data['url'].match('.jpg') || data['url'].match('.png')) {
+                embed.setColor('RANDOM')
+                embed.setTitle(`r/${sub}`)
+                embed.setURL(`https://reddit.com${data['permalink']}`)
+                embed.setFooter(`Photo by ${data['author']} 😉`)
+                embed.setImage(data['url'])
+                message.channel.send(embed);
+            } else if(data['url'].match('gfycat')) {
+                console.log('shmeet ')
+                embed.setColor('RANDOM')
+                embed.setTitle(`r/${sub}`)
+                embed.setURL(`https://reddit.com${data['permalink']}`)
+                embed.setFooter(`Photo by ${data['author']} 😉`)
+                embed.setImage(data['url']+'.gif')
+                message.channel.send(embed);
+            }
+        });
     } else {
-     var embed = new discord.RichEmbed()
-     .setColor('RANDOM')
-     .setAuthor('Lockebot')
-     .setTitle('r/gonewild')  
-     .setURL(`https://reddit.com${data2['permalink']}`)
-     .setFooter(`Image by ${data2['author']}`)
-     .setImage(data2['url']+'.jpg')
-     message.channel.send(embed);
+        message.channel.send('Must be in a nsfw channel!')
     }
- })
 }
 
 module.exports.help = {
-    name: 'nsfw'
-}
+    name: 'nsfw',
+    usage: '>nsfw',
+    description: 'Gets a random NSFW picture via Reddit!'
+} 
